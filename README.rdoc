@@ -1,0 +1,74 @@
+= Importex
+
+This Ruby gem helps import an Excel document into a database or some other format. Just create a class defining the columns and pass in a path to an "xls" file. It will automatically format the columns into specified Ruby objects and raise errors on bad data.
+
+This is extracted from an internal set of administration scripts used for importing products into an e-commerce application. Rather than going through a web interface or directly into an SQL database, it is easiest to fill out an Excel spreadsheet with a row for each product, and filter that through a Ruby script.
+
+Note: This library has some hacks and is not intended to be a full featured, production quality library. I designed it to fit my needs for importing records through internal administration scripts.
+
+
+== Installation
+
+It is not yet available as a gem, but will be soon.
+
+  gem install importex
+
+In the meantime you'll have to include the lib files directly.
+
+Note: This relies on the parseexcel gem so you will need to have that installed as well.
+
+
+== Usage
+
+First create a class which inherits from Importex::Base and define the columns there.
+
+  require 'importex'
+  class Product < Importex::Base
+    column "Name", :required => true
+    column "Price", :format => /^\d+\.\d\d$/, :required => true
+    column "Amount in Stock", :type => Integer
+    column "Release Date", :type => Date
+    column "Discontinued", :type => Boolean
+  end
+
+Pass in an "xls" file to the Import class method to import the data. It expects the first row to be the column names and every row after that to be the records.
+
+  Product.import("path/to/products.xls")
+
+Use the "all" method to fetch the product instances for all of the records. You can access the columns like a hash.
+
+  products = Product.all
+  products.first["Discontinued"] # => false
+
+It is up to you to import this data into the database or other location. You can do this through something like Active Record, DataMapper, or Sequel.
+
+
+== Handling Bad Data
+
+If the Excel document is formatted improperly it will raise some form of Importex::ImportError exception. I recommend rescuing from this and handling it in a clean way for the user so they do not get a full stack trace.
+
+  begin
+    Product.import(...)
+  rescue Importex::ImportError => e
+    puts e.message
+  end
+
+
+== Custom Types
+
+It is possible to have smart columns which reference other Ruby objects. Importex expects a class method called "importex_value" to exist which it passes the Excel content to and expects a ruby object in return. Let's say you have a Category model in Active Record and you have the name of the category in the Products Excel sheet.
+
+  class Category < ActiveRecord::Base
+    def self.importex_value(str)
+      find_by_name!(str)
+    rescue ActiveRecord::RecordNotFound
+      raise Importex::InvalidCell, "No category with that name."
+    end
+  end
+  
+  class Product < Importex::Base
+    column "Category", :type => Category
+  end
+  
+Then product["Category"] will return an instance of the found Category.
+
