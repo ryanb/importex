@@ -1,5 +1,7 @@
 = Importex
 
+RDocs[http://rdoc.info/projects/ryanb/importex] | Metrics[http://getcaliper.com/caliper/project?repo=git%3A%2F%2Fgithub.com%2Fryanb%2Fimportex.git] | Tests[http://runcoderun.com/ryanb/importex]
+
 This Ruby gem helps import an Excel document into a database or some other format. Just create a class defining the columns and pass in a path to an "xls" file. It will automatically format the columns into specified Ruby objects and raise errors on bad data.
 
 This is extracted from an internal set of administration scripts used for importing products into an e-commerce application. Rather than going through a web interface or directly into an SQL database, it is easiest to fill out an Excel spreadsheet with a row for each product, and filter that through a Ruby script.
@@ -9,13 +11,9 @@ Note: This library has some hacks and is not intended to be a full featured, pro
 
 == Installation
 
-It is not yet available as a gem, but will be soon.
+You can install through a gem.
 
   gem install importex
-
-In the meantime you'll have to include the lib files directly.
-
-Note: This relies on the parseexcel gem so you will need to have that installed as well.
 
 
 == Usage

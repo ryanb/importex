@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'parseexcel'
 
 require File.expand_path(File.dirname(__FILE__) + '/importex/base')

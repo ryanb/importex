@@ -28,12 +28,6 @@ class Boolean
   end
 end
 
-class Date
-  def self.importex_value(str)
-    !["", "f", "F", "n", "N", "0"].include?(str)
-  end
-end
-
 class Time
   def self.importex_value(str)
     Time.parse(str) unless str.blank?
