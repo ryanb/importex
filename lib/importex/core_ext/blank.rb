@@ -1,3 +1,4 @@
+# Stolen straight from active_support/core_ext/object/blank.rb
 class Object
   # An object is blank if it's false, empty, or a whitespace string.
   # For example, "", "   ", +nil+, [], and {} are blank.
