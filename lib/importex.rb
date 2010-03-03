@@ -2,7 +2,7 @@ require 'spreadsheet'
 
 require File.expand_path(File.dirname(__FILE__) + '/importex/base')
 require File.expand_path(File.dirname(__FILE__) + '/importex/column')
-require File.expand_path(File.dirname(__FILE__) + '/importex/ruby_additions')
+require File.expand_path(File.dirname(__FILE__) + '/importex/core_ext/importex_value.rb')
 
 module Importex
   # This is an abstract exception for errors occurred during import. It is recommended
