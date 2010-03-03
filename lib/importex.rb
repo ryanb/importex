@@ -2,6 +2,7 @@ require 'spreadsheet'
 
 require File.expand_path(File.dirname(__FILE__) + '/importex/base')
 require File.expand_path(File.dirname(__FILE__) + '/importex/column')
+require File.expand_path(File.dirname(__FILE__) + '/importex/core_ext/blank.rb')
 require File.expand_path(File.dirname(__FILE__) + '/importex/core_ext/importex_value.rb')
 
 module Importex
