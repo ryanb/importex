@@ -28,19 +28,19 @@ module Importex
     # Pass a path to an Excel (xls) document and optionally the worksheet index. The worksheet
     # will default to the first one (0). The first row in the Excel document should be the column
     # names, all rows after that should be records.
-    def self.import(path, worksheet_index = 0)
+    def self.import(path, worksheet_index = 0, header_index = 0)
       Ole::Log.level = Logger::ERROR # to avoid the annoying "root name was" warning
       @records ||= []
       workbook = Spreadsheet.open(path)
       worksheet = workbook.worksheet(worksheet_index)
       worksheet.format_dates!
-      columns = worksheet.row(0).map do |cell|
+      columns = worksheet.row(header_index).map do |cell|
         @columns.detect { |column| column.name == cell.to_s }
       end
       (@columns.select(&:required?) - columns).each do |column|
         raise MissingColumn, "Column #{column.name} is required but it doesn't exist."
       end
-      (1..worksheet.last_row_index).each do |row_number|
+      ((header_index+1)..worksheet.last_row_index).each do |row_number|
         row = worksheet.row(row_number)
         unless row.at(0).nil?
           attributes = {}

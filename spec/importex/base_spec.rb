@@ -4,12 +4,20 @@ describe Importex::Base do
   before(:each) do
     @simple_class = Class.new(Importex::Base)
     @xls_file = File.dirname(__FILE__) + '/../fixtures/simple.xls'
+    @non_first_row_header_xls_file = File.dirname(__FILE__) + '/../fixtures/non_first_row_header_simple.xls'
   end
   
   it "should import simple excel doc" do
     @simple_class.column "Name"
     @simple_class.column "Age", :type => Integer
     @simple_class.import(@xls_file)
+    @simple_class.all.map(&:attributes).should == [{"Name" => "Foo", "Age" => 27}, {"Name" => "Bar", "Age" => 42}]
+  end
+  
+  it "should import simple excel doc" do
+    @simple_class.column "Name"
+    @simple_class.column "Age", :type => Integer
+    @simple_class.import(@non_first_row_header_xls_file,0,4)
     @simple_class.all.map(&:attributes).should == [{"Name" => "Foo", "Age" => 27}, {"Name" => "Bar", "Age" => 42}]
   end
   
