@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Importex", "--main", "README.rdoc"]
   
-  s.add_dependency("parseexcel", ">= 0.5.2")
+  s.add_dependency("spreadsheet", "= 0.6.4.1")
   
   s.rubygems_version = "1.3.4"
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2")
