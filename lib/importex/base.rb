@@ -38,7 +38,7 @@ module Importex
       (@columns.select(&:required?) - columns).each do |column|
         raise MissingColumn, "Column #{column.name} is required but it doesn't exist."
       end
-      (1...worksheet.num_rows).each do |row_number|
+      (1...worksheet.row_count).each do |row_number|
         row = worksheet.row(row_number)
         unless row.at(0).nil?
           attributes = {}
