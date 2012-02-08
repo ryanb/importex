@@ -38,7 +38,7 @@ describe Importex::Base do
     @simple_class.column "Name", :type => Integer
     lambda {
       @simple_class.import(@xls_file)
-    }.should raise_error(Importex::InvalidCell, 'Foo (column Name, row 2) does not match required format: Not a number.')
+    }.should raise_error(Importex::InvalidCell, 'Foo (column Name, row 2) does not match required format: Not a Integer.')
   end
   
   it "should have a [] method which returns attributes" do
