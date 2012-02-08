@@ -30,14 +30,16 @@ module Importex
     # names, all rows after that should be records.
     def self.import(path, worksheet_index = 0)
       @records ||= []
-      workbook = Spreadsheet::ParseExcel.parse(path)
+      workbook = Spreadsheet.open(path)
       worksheet = workbook.worksheet(worksheet_index)
+
       columns = worksheet.row(0).map do |cell|
-        @columns.detect { |column| column.name == cell.to_s('latin1') }
+        @columns.detect { |column| column.name == cell.to_s }
       end
-      (@columns.select(&:required?) - columns).each do |column|
-        raise MissingColumn, "Column #{column.name} is required but it doesn't exist."
-      end
+
+      missing_columns = @columns.select(&:required?) - columns
+      raise MissingColumn, "Columns #{missing_columns.map(&:name).join("\n")} is/are required but it doesn't exist in #{columns.map(&:name)}." unless missing_columns.blank?
+      
       (1...worksheet.row_count).each do |row_number|
         row = worksheet.row(row_number)
         unless row.at(0).nil?
@@ -49,7 +51,7 @@ module Importex
               elsif row.at(index).type == :date
                 value = row.at(index).date.strftime("%Y-%m-%d %H:%M:%I")
               else
-                value = row.at(index).to_s('latin1')
+                value = row.at(index)
               end
               attributes[column.name] = column.cell_value(value, row_number)
             end
