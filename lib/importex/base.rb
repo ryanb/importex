@@ -49,7 +49,7 @@ module Importex
             if column
               if row.at(index).nil?
                 value = ""
-              elsif row.at(index).type == :date
+              elsif row.at(index).class == :date
                 value = row.at(index).date.strftime("%Y-%m-%d %H:%M:%I")
               else
                 value = row.at(index)
