@@ -57,6 +57,6 @@ describe Importex::Base do
     @simple_class.column "Foo", :required => true
     lambda {
       @simple_class.import(@xls_file)
-    }.should raise_error(Importex::MissingColumn, "Column Foo is required but it doesn't exist.")
+    }.should raise_error(Importex::MissingColumn, "Columns Foo is/are required but it doesn't exist in Age.")
   end
 end

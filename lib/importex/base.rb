@@ -38,7 +38,8 @@ module Importex
       end
 
       missing_columns = @columns.select(&:required?) - columns
-      raise MissingColumn, "Columns #{missing_columns.map(&:name).join("\n")} is/are required but it doesn't exist in #{columns.map(&:name)}." unless missing_columns.blank?
+
+      raise MissingColumn, "Columns #{missing_columns.map(&:name).join(",")} is/are required but it doesn't exist in #{columns.compact.map(&:name).join(",")}." unless missing_columns.blank?
       
       (1...worksheet.row_count).each do |row_number|
         row = worksheet.row(row_number)
