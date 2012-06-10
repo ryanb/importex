@@ -1,7 +1,7 @@
 class Integer
   def self.importex_value(str)
     unless str.blank?
-      if str =~ /^[.\d]+$/
+      if str =~ /^[-]{0,1}[.\d]+$/
         str.to_i
       else
         raise Importex::InvalidCell, "Not a number."
@@ -13,7 +13,7 @@ end
 class Float
   def self.importex_value(str)
     unless str.blank?
-      if str =~ /^[.\d]+$/
+      if str =~ /^[-]{0,1}[.\d]+$/
         str.to_f
       else
         raise Importex::InvalidCell, "Not a number."

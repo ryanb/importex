@@ -1,3 +1,8 @@
+0.1.1 (Feb 11, 2010)
+
+* switching to "spreadsheet" gem instead of "parseexcel"
+
+
 0.1.0 (Feb 8, 2010)
 
 * initial release
