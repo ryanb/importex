@@ -30,15 +30,18 @@ module Importex
     # names, all rows after that should be records.
     def self.import(path, worksheet_index = 0)
       @records ||= []
-      workbook = Spreadsheet::ParseExcel.parse(path)
+      workbook = Spreadsheet.open(path)
       worksheet = workbook.worksheet(worksheet_index)
+
       columns = worksheet.row(0).map do |cell|
-        @columns.detect { |column| column.name == cell.to_s('latin1') }
+        @columns.detect { |column| column.name == cell.to_s }
       end
-      (@columns.select(&:required?) - columns).each do |column|
-        raise MissingColumn, "Column #{column.name} is required but it doesn't exist."
-      end
-      (1...worksheet.num_rows).each do |row_number|
+
+      missing_columns = @columns.select(&:required?) - columns
+
+      raise MissingColumn, "Columns #{missing_columns.map(&:name).join(",")} is/are required but it doesn't exist in #{columns.compact.map(&:name).join(",")}." unless missing_columns.blank?
+      
+      (1...worksheet.row_count).each do |row_number|
         row = worksheet.row(row_number)
         unless row.at(0).nil?
           attributes = {}
@@ -46,10 +49,10 @@ module Importex
             if column
               if row.at(index).nil?
                 value = ""
-              elsif row.at(index).type == :date
+              elsif row.at(index).class == :date
                 value = row.at(index).date.strftime("%Y-%m-%d %H:%M:%I")
               else
-                value = row.at(index).to_s('latin1')
+                value = row.at(index)
               end
               attributes[column.name] = column.cell_value(value, row_number)
             end

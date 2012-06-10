@@ -23,6 +23,7 @@ module Importex
     end
     
     def match_format?(str, format)
+      str = str.to_s
       case format
       when String then str == format
       when Regexp then str =~ format
